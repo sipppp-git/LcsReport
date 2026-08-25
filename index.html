@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laporan Penderasan Informasi</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- TAMPILAN 1: FORM INPUT (SUPER CLASSIC)         -->
+    <!-- ============================================== -->
+    <div id="main-view" class="container my-4 form-container">
+        
+        <!-- Kotak Utama Tanpa Lengkungan & Bayangan Halus -->
+        <div class="card border border-dark rounded-0 classic-shadow">
+            
+            <!-- HEADER BEKU (Sticky Top) -->
+            <div class="card-header text-center py-3 rounded-0 sticky-top classic-header" style="z-index: 1020;">
+                <h3 class="mb-1 fw-bold text-uppercase">LAPORAN PENDERASAN INFORMASI</h3>
+                <h5 class="mb-0 fw-bold">PENYULUHAN PERTANIAN</h5>
+            </div>
+            
+            <div class="card-body p-4 bg-white">
+                <form id="formLaporan">
+                    
+                    <!-- Seksi A: Data Diri -->
+                    <div class="mb-5">
+                        <h5 class="border-bottom border-2 border-dark pb-1 mb-4 fw-bold">A. DATA PENYULUH</h5>
+                        
+                        <!-- Nama Lengkap -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nama Lengkap <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control rounded-0 border-dark" id="inputNama" required>
+                        </div>
+                        
+                        <!-- NIP (Vertikal) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">NIP <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control rounded-0 border-dark" id="inputNIP" required>
+                        </div>
+                        
+                        <!-- Kabupaten (Vertikal) -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Kabupaten <span class="text-danger">*</span></label>
+                            <select class="form-select rounded-0 border-dark w-50" id="inputKab" required>
+                                <option value="" disabled selected>Pilih Kabupaten...</option>
+                                <option value="Jayawijaya">Jayawijaya</option>
+                                <option value="Pegunungan Bintang">Pegunungan Bintang</option>
+                                <option value="Yahukimo">Yahukimo</option>
+                                <option value="Mamberamo Tengah">Mamberamo Tengah</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Seksi B: Eviden Kegiatan -->
+                    <div>
+                        <h5 class="border-bottom border-2 border-dark pb-1 mb-4 fw-bold">B. EVIDEN KEGIATAN</h5>
+                        
+                        <div class="table-responsive mb-3 border border-dark">
+                            <table class="table table-bordered border-dark align-middle mb-0" id="tabelEviden">
+                                <thead class="classic-table-header text-center">
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="12%">Tanggal</th>
+                                        <th width="28%">Materi (LCS)</th>
+                                        <th width="15%">Bukti Like</th>
+                                        <th width="15%">Bukti Comment</th>
+                                        <th width="15%">Bukti Share</th>
+                                        <th width="10%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyEviden">
+                                    <tr>
+                                        <td class="nomor-urut text-center fw-bold">1</td>
+                                        <td><input type="date" class="form-control form-control-sm rounded-0 border-dark input-tanggal" required></td>
+                                        <td><textarea class="form-control form-control-sm rounded-0 border-dark input-materi" rows="2" required></textarea></td>
+                                        <td><input type="file" class="form-control form-control-sm rounded-0 border-dark input-like" accept="image/png, image/jpeg, image/jpg" required></td>
+                                        <td><input type="file" class="form-control form-control-sm rounded-0 border-dark input-comment" accept="image/png, image/jpeg, image/jpg" required></td>
+                                        <td><input type="file" class="form-control form-control-sm rounded-0 border-dark input-share" accept="image/png, image/jpeg, image/jpg" required></td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-sm rounded-0 fw-bold btn-hapus" disabled>Hapus</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary btn-sm rounded-0 fw-bold border-dark px-3" id="btnTambahBaris">
+                            [+] Tambah Baris
+                        </button>
+                    </div>
+
+                    <hr class="my-5 border-dark border-2">
+
+                    <!-- Area Tombol Aksi (Tegas & Klasik) -->
+                    <div class="d-flex justify-content-end gap-3 align-items-center">
+                        <button type="button" class="btn btn-secondary rounded-0 fw-bold border-dark px-4 py-2" id="btnPreview">
+                            Preview Dokumen
+                        </button>
+                        
+                        <button type="submit" class="btn btn-success rounded-0 fw-bold border-dark px-4 py-2" id="btnCetak">
+                            Cetak PDF Langsung
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TAMPILAN 2: PREVIEW PDF (KERTAS FORMAL)        -->
+    <!-- ============================================== -->
+    <div id="preview-view" style="display: none;" class="bg-secondary p-4 min-vh-100">
+        <div class="container-fluid">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4 p-3 border border-dark sticky-top classic-header" style="z-index: 1020;">
+                <button class="btn btn-light rounded-0 fw-bold border-dark btn-sm px-3" id="btnKembali">
+                    Kembali ke Form
+                </button>
+                <h5 class="m-0 fw-bold text-uppercase">Mode Pratinjau Cetak</h5>
+                <button class="btn btn-success rounded-0 fw-bold border-dark px-4" id="btnCetakPreview">
+                    Cetak PDF Sekarang
+                </button>
+            </div>
+
+            <!-- AREA KERTAS -->
+            <div id="printable-area" class="kertas-preview">
+                <!-- Kop Surat / Judul Dokumen -->
+                <div class="pdf-header text-center mb-4 pb-2 border-bottom border-3 border-dark">
+                    <h2 class="pdf-title mb-1">LAPORAN PENDERASAN INFORMASI</h2>
+                    <h3 class="pdf-subtitle">PENYULUHAN PERTANIAN</h3>
+                </div>
+                
+                <table class="pdf-header-table mb-4">
+                    <tr><td width="120">Nama Lengkap</td><td width="10">:</td><td id="pdfNama" class="fw-normal"></td></tr>
+                    <tr><td>NIP</td><td>:</td><td id="pdfNIP" class="fw-normal"></td></tr>
+                    <tr><td>Kabupaten</td><td>:</td><td id="pdfKab" class="fw-normal"></td></tr>
+                </table>
+
+                <table class="pdf-data-table">
+                    <thead>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th width="12%">Tanggal</th>
+                            <th width="29%">Materi (LCS)</th>
+                            <th width="18%">Bukti Like</th>
+                            <th width="18%">Bukti Comment</th>
+                            <th width="18%">Bukti Share</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pdfTbodyEviden">
+                        <!-- Data akan dimasukkan oleh JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
